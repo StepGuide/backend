@@ -51,7 +51,7 @@ public class SecurityConfig {
                                 "/assets/**", "/static/**", "/css/**", "/js/**", "/img/**"
                         ).permitAll()
                         .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/**").authenticated()
+                     //   .requestMatchers("/api/**").authenticated()
                         .anyRequest().permitAll()
                 )
 
