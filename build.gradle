@@ -38,6 +38,22 @@ dependencies {
 	implementation 'com.mysql:mysql-connector-j'
 
 	implementation 'org.springframework:spring-tx'
+
+	// ✅ WebSocket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	// ✅ Redis (Lettuce 사용)
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// ✅ STOMP 메시지 브로커 지원
+	implementation 'org.springframework:spring-messaging'
+
+	// ✅ JSON 직렬화/역직렬화 (메시지 payload 용)
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+	// ✅ Lombok (이미 있을 수 있음)
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
 }
 
 tasks.named('test') {
