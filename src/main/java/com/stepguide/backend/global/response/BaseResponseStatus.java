@@ -18,10 +18,18 @@ public enum BaseResponseStatus {
     DATABASE_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "데이터베이스 오류가 발생했습니다."),
     DATABASE_CONNECTION_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "데이터베이스 연결에 실패했습니다."),
     INTERNAL_SERVER_ERROR(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "서버 내부 오류가 발생했습니다."),
-    FAIL_IMAGE_CONVERT(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Multipart 파일 전환에 실패했습니다.");
+    FAIL_IMAGE_CONVERT(false, HttpStatus.INTERNAL_SERVER_ERROR.value(), "Multipart 파일 전환에 실패했습니다."),
+
+
+    //사기게좌 조회 관련 에러
+    INVALID_ACCOUNT_ERROR(false, HttpStatus.BAD_REQUEST.value(), "계좌번호 형식이 올바르지 않습니다."),
+    ACCOUNT_VERICATION_FAILED(false, HttpStatus.BAD_REQUEST.value(), "계좌 확인에 실패했습니다.");
+
+
     private final boolean isSuccess;
     private final int code;
     private final String message;
+
 
     /**
      * isSuccess : 요청의 성공 또는 실패
