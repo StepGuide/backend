@@ -33,7 +33,11 @@ public enum BaseResponseStatus {
     AUTH_REFRESH_TOKEN_EXPIRED(false, HttpStatus.UNAUTHORIZED.value(), "리프레시 토큰이 만료되었습니다."),
     AUTH_REFRESH_TOKEN_REVOKED(false, HttpStatus.UNAUTHORIZED.value(), "리프레시 토큰이 폐기되었습니다."),
     AUTH_ACCESS_TOKEN_INVALID(false, HttpStatus.UNAUTHORIZED.value(), "유효하지 않은 액세스 토큰입니다."),
-    AUTH_ACCESS_TOKEN_EXPIRED(false, HttpStatus.UNAUTHORIZED.value(), "액세스 토큰이 만료되었습니다.");
+    AUTH_ACCESS_TOKEN_EXPIRED(false, HttpStatus.UNAUTHORIZED.value(), "액세스 토큰이 만료되었습니다."),
+
+    //사기게좌 조회 관련 에러
+    INVALID_ACCOUNT_ERROR(false, HttpStatus.BAD_REQUEST.value(), "계좌번호 형식이 올바르지 않습니다."),
+    ACCOUNT_VERICATION_FAILED(false, HttpStatus.BAD_REQUEST.value(), "계좌 확인에 실패했습니다.");
 
     private final boolean isSuccess;
     private final int code;
@@ -51,3 +55,4 @@ public enum BaseResponseStatus {
         this.message = message;
     }
 }
+
