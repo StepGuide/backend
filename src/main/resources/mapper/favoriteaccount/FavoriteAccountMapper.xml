@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stepguide.backend.domain.favoriteAccount.mapper.FavoriteAccountMapper">
+
+    <select id="getFavoriteAccounts" parameterType="long" resultType="com.stepguide.backend.domain.favoriteAccount.entity.FavoriteAccountVO" >
+        SELECT favorite_id,send_bank_code, send_account_number, send_bank_nickname, created_at, updated_at
+        FROM favorites
+        WHERE user_id = #{userId}
+    </select>
+
+    <insert id="addFavoriteAccount" parameterType="com.stepguide.backend.domain.favoriteAccount.entity.FavoriteAccountVO">
+        INSERT INTO favorites
+        (user_id, send_bank_code, send_account_number,send_bank_nickname, created_at, updated_at)
+        VALUES
+            (#{userId}, #{sendBankCode}, #{sendAccountNumber}, #{sendBankNickname},NOW(), NOW())
+    </insert>
+
+    <delete id="delete">
+        delete from favorites where favorite_id =#{favoriteId}
+    </delete>
+
+</mapper>
