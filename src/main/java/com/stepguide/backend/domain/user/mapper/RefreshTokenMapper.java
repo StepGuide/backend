@@ -13,4 +13,5 @@ public interface RefreshTokenMapper {
     RefreshTokenDTO findByTokenHashForUpdate(@Param("tokenHash") byte[] tokenHash);
     int revokeById(@Param("id") Long id);
     int revokeIfNotRevoked(@Param("id") Long id);
+    int revokeAllActiveByUserId(@Param("userId") Long userId);
 }
