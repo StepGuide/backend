@@ -22,6 +22,8 @@ public class RefreshTokenService {
 
     // RT 발급 및 저장
     public void issueAndStoreRefreshToken(Long userId, HttpServletResponse res) {
+        refreshTokenMapper.revokeAllActiveByUserId(userId);
+
         String rtValue = jwtService.createRefreshTokenValue();
         byte[] hash = HashUtil.sha256ToBytes(rtValue);
 
