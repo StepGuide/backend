@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.stepguide.backend.domain.user.mapper.RefreshTokenMapper">
+
+    <!-- DB 컬럼 DTO 필드 매핑 -->
+    <resultMap id="RefreshTokenMap" type="com.stepguide.backend.domain.user.dto.RefreshTokenDTO">
+        <id     property="id"          column="id"/>
+        <result property="userId"      column="user_id"/>
+        <!-- BINARY(32) <-> byte[] 매핑 -->
+        <result property="tokenHash"   column="token_hash" jdbcType="BINARY" javaType="[B"/>
+        <result property="expiresAt"   column="expires_at"/>
+        <result property="revoked"     column="revoked"/>
+        <result property="rotatedFrom" column="rotated_from"/>
+        <result property="createdAt"   column="created_at"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="com.stepguide.backend.domain.user.dto.RefreshTokenDTO"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO refresh_tokens
+            (user_id, token_hash, expires_at, revoked, rotated_from, created_at)
+        VALUES
+            (#{userId},
+             #{tokenHash,jdbcType=BINARY},
+             #{expiresAt},
+             #{revoked},
+             #{rotatedFrom},
+             NOW())
+    </insert>
+
+    <select id="findByTokenHash" parameterType="byte[]" resultMap="RefreshTokenMap">
+        SELECT id, user_id, token_hash, expires_at, revoked, rotated_from, created_at
+        FROM refresh_tokens
+        WHERE token_hash = #{tokenHash, jdbcType=BINARY}
+        LIMIT 1
+    </select>
+
+    <select id="findByTokenHashForUpdate" parameterType="byte[]" resultMap="RefreshTokenMap">
+        SELECT id, user_id, token_hash, expires_at, revoked, rotated_from, created_at
+        FROM refresh_tokens
+        WHERE token_hash = #{tokenHash, jdbcType=BINARY}
+            FOR UPDATE
+    </select>
+
+    <update id="revokeById" parameterType="long">
+        UPDATE refresh_tokens
+        SET revoked = 1
+        WHERE id = #{id}
+    </update>
+
+    <!-- 조건부 폐기: 이미 폐기된 건이면 0행 반환 -->
+    <update id="revokeIfNotRevoked" parameterType="long">
+        UPDATE refresh_tokens
+        SET revoked = 1
+        WHERE id = #{id}
+          AND revoked = 0
+    </update>
+    <!-- 리프레시 겹칩 현상 제거 -->
+    <update id="revokeAllActiveByUserId" parameterType="long">
+        UPDATE refresh_tokens
+        SET revoked = 1
+        WHERE user_id = #{userId} AND revoked = 0
+    </update>
+
+</mapper>
