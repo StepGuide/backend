@@ -23,7 +23,7 @@ public class AccountTransferServiceImpl implements AccountTransferService{
 //    }
 
     @Override
-    @Transactional
+//    @Transactional
     public void transfer(AccountTransferDTO dto){
         // 1. 출금 계좌 조회
         AccountTransferVO fromAccount = accountTransferMapper.findAccountByAccountNumber(
