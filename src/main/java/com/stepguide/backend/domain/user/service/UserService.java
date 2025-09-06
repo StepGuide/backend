@@ -69,4 +69,7 @@ public class UserService {
             throw new BaseException(BaseResponseStatus.DATABASE_ERROR);
         }
     }
+    public String getUsernameById(Long userId){
+        return userMapper.findUsernameById(userId);
+    }
 }

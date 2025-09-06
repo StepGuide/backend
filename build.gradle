@@ -70,6 +70,16 @@ dependencies {
 
 	// Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// Mockito + JUnit 5 통합 (MockitoExtension 사용 시)
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+
+	// Hamcrest (matchesPattern 등으로 응답 검증 시)
+	testImplementation 'org.hamcrest:hamcrest:2.2'
+
+	// ✅ 테스트용 추가
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+	testImplementation 'org.hamcrest:hamcrest:2.2'
 }
 
 tasks.named('test') {
