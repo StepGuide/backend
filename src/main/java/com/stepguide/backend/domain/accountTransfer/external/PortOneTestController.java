@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/postonetest")
-public class PortOneTestContoller {
+public class PortOneTestController {
 
     private final PortOneClient portOneClient;
 
