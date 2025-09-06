@@ -11,4 +11,6 @@ public interface UserMapper {
                                        @Param("providerId") String providerId);
 
     void insertUser(UserDTO user); // useGeneratedKeys는 XML에서 설정
+
+    String findUsernameById(@Param("userId") Long userId);
 }

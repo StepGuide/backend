@@ -28,4 +28,9 @@
              #{providerId})
     </insert>
 
+    <select id="findUsernameById" resultType="String">
+        SELECT username
+        FROM users
+        WHERE user_id = #{userId}
+    </select>
 </mapper>
