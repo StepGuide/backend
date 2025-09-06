@@ -57,5 +57,11 @@
         WHERE id = #{id}
           AND revoked = 0
     </update>
+    <!-- 리프레시 겹칩 현상 제거 -->
+    <update id="revokeAllActiveByUserId" parameterType="long">
+        UPDATE refresh_tokens
+        SET revoked = 1
+        WHERE user_id = #{userId} AND revoked = 0
+    </update>
 
 </mapper>
