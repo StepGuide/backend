@@ -44,6 +44,7 @@ public class AccountTransferVO {
     create_time             생성시각    (date)
     deposit_withdrawal      입금/출금 (deposit/withdrawal) (enum)
     account_holder_name     예금주명    (varchar(100)
+    memo                    메모       (varchar(100)
     */
     private Long transactionId;             //거래내역 로그 id
     private String status;                  //거래 상태
@@ -53,6 +54,7 @@ public class AccountTransferVO {
     private AccountTransferDTO.DepositWithdrawal depositWithdrawal;  //입금/출금 구분
     private String payeeAccountNumber;      //입금 계좌번호
     private String accountHolderName;       //예금주명
+    private String memo;                    //메모
 
     public enum DepositWithdrawal{
         DEPOSIT,        //입금

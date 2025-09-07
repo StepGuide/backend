@@ -4,31 +4,80 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.stepguide.backend.domain.accountTransfer.mapper.AccountTransferMapper">
 
-    <!-- 1. 출금 계좌 조회 -->
-    <select id="findAccountByAccountNumber"
+
+    <!--    &lt;!&ndash; 1. 출금 계좌 조회 &ndash;&gt;-->
+<!--    <select id="findAccountByAccountNumber"-->
+<!--            resultType="com.stepguide.backend.domain.accountTransfer.entity.AccountTransferVO">-->
+<!--        SELECT-->
+<!--            account_id,-->
+<!--            user_id,-->
+<!--            account_number,-->
+<!--            account_name,-->
+<!--            balance,-->
+<!--            bank_code,-->
+<!--            created_at,-->
+<!--            updated_at-->
+<!--        FROM accounts-->
+<!--        WHERE account_number=#{accountNumber} AND bank_code=#{bankCode}-->
+<!--    </select>-->
+
+<!--    &lt;!&ndash; 2. 출금/입금 잔액 업데이트 &ndash;&gt;-->
+<!--    <update id="updateAccountBalance">-->
+<!--        UPDATE accounts-->
+<!--        SET balance=#{balance}, updated_at=NOW()-->
+<!--        WHERE account_id=#{accountId}-->
+<!--    </update>-->
+
+<!--    &lt;!&ndash; 3. 거래내역 기록 &ndash;&gt;-->
+<!--    <insert id="insertTransaction">-->
+<!--        INSERT INTO transactions(-->
+<!--                                 account_id,-->
+<!--                                 status,-->
+<!--                                 send_bank_code,-->
+<!--                                 transaction_amount,-->
+<!--                                 created_time,-->
+<!--                                 deposit_withdrawal,-->
+<!--                                 payee_account_number,-->
+<!--                                 account_holder_name-->
+<!--        )-->
+<!--        VALUES (-->
+<!--                #{accountId},-->
+<!--                #{status},-->
+<!--                #{sendBankCode},-->
+<!--                #{transactionAmount},-->
+<!--                #{createdTime},-->
+<!--                #{depositWithdrawal},-->
+<!--                #{payeeAccountNumber},-->
+<!--                #{accountHolderName}-->
+<!--        )-->
+<!--    </insert>-->
+
+    <!-- 내 전체 계좌 조회 -->
+    <select id="findAccountsByUserId"
             resultType="com.stepguide.backend.domain.accountTransfer.entity.AccountTransferVO">
-        SELECT
-            account_id,
-            user_id,
-            account_number,
-            account_name,
-            balance,
-            bank_code,
-            created_at,
-            updated_at
+        SELECT *
         FROM accounts
-        WHERE account_number=#{accountNumber} AND bank_code=#{bankCode}
+        WHERE user_id = #{userId}
     </select>
 
-    <!-- 2. 출금/입금 잔액 업데이트 -->
+    <!-- 출금 계좌 조회 -->
+    <select id="findAccountByAccountNumber"
+            resultType="com.stepguide.backend.domain.accountTransfer.entity.AccountTransferVO">
+        SELECT *
+        FROM accounts
+        WHERE account_number = #{accountNumber}
+          AND bank_code = #{bankCode}
+    </select>
+
+    <!-- 출금 계좌 잔액 업데이트 -->
     <update id="updateAccountBalance">
         UPDATE accounts
-        SET balance=#{balance}, updated_at=NOW()
-        WHERE account_id=#{accountId}
+        SET balance = #{balance}, updated_at = NOW()
+        WHERE account_id = #{accountId}
     </update>
 
-    <!-- 3. 거래내역 기록 -->
-    <insert id="insertTransaction">
+    <!-- 거래 내역 저장 -->
+    <insert id="insertTransactions">
         INSERT INTO transactions(
                                  account_id,
                                  status,
@@ -37,7 +86,8 @@
                                  created_time,
                                  deposit_withdrawal,
                                  payee_account_number,
-                                 account_holder_name
+                                 account_holder_name,
+                                 memo
         )
         VALUES (
                 #{accountId},
@@ -47,8 +97,10 @@
                 #{createdTime},
                 #{depositWithdrawal},
                 #{payeeAccountNumber},
-                #{accountHolderName}
+                #{accountHolderName},
+                #{memo}
         )
     </insert>
+
 
 </mapper>
