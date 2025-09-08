@@ -71,7 +71,6 @@ dependencies {
 	// Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
-<<<<<<< Updated upstream
 	// Mockito + JUnit 5 통합 (MockitoExtension 사용 시)
 	testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
 
@@ -81,10 +80,10 @@ dependencies {
 	// ✅ 테스트용 추가
 	testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
 	testImplementation 'org.hamcrest:hamcrest:2.2'
-=======
+
 	// FireBase
 	implementation 'com.google.firebase:firebase-admin:9.2.0'
->>>>>>> Stashed changes
+
 }
 
 tasks.named('test') {
