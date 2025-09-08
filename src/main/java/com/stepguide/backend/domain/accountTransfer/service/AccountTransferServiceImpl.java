@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class AccountTransferServiceImpl implements AccountTransferService{
+public class  AccountTransferServiceImpl implements AccountTransferService{
 
     private final AccountTransferMapper accountTransferMapper;
     private final PortOneClient portOneClient;
@@ -24,6 +24,15 @@ public class AccountTransferServiceImpl implements AccountTransferService{
     @Override
     public List<AccountTransferDTO> getUserAccounts(Long userId){
         List<AccountTransferVO> accounts = accountTransferMapper.findAccountsByUserId(userId);
+        return accounts.stream()
+                .map(AccountTransferDTO::of)
+                .collect(Collectors.toList());
+    }
+
+    //거래내역 조회
+    @Transactional
+    public List<AccountTransferDTO> getAccountTransactions(Long accountId){
+        List<AccountTransferVO> accounts = accountTransferMapper.findAccountTransactions(accountId);
         return accounts.stream()
                 .map(AccountTransferDTO::of)
                 .collect(Collectors.toList());
@@ -83,5 +92,4 @@ public class AccountTransferServiceImpl implements AccountTransferService{
 
         accountTransferMapper.insertTransactions(dto);
     }
-
 }

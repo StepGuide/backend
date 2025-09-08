@@ -22,6 +22,12 @@ public class AccountTransferController {
         return ResponseEntity.ok(accountTransferService.getUserAccounts(userId));
     }
 
+    //1.1단계 : 최근 계좌 조회
+    @GetMapping("/transactions/{accountId}")
+    public ResponseEntity<List<AccountTransferDTO>> getAccountTransfer(@PathVariable Long accountId) {
+        return ResponseEntity.ok(accountTransferService.getAccountTransactions(accountId));
+    }
+
     // 2단계: 검증 (사용자 입력 → 서버 확인 후 반환)
     @PostMapping("/validate")
     public ResponseEntity<AccountTransferDTO> validateTransfer(@RequestBody AccountTransferDTO dto) {

@@ -25,6 +25,7 @@ public interface AccountTransferMapper {
     // 거래 내역 저장
     void insertTransactions(AccountTransferDTO dto);
 
-
+    // 거래 내역 조회
+    List<AccountTransferVO> findAccountTransactions(@Param("accountId")Long accountId);
 
 }
