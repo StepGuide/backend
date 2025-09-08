@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,65 +19,69 @@ public class AccountTransferServiceImpl implements AccountTransferService{
 
     private final AccountTransferMapper accountTransferMapper;
     private final PortOneClient portOneClient;
-//    private final AccountTransferService accountTransferService;
 
-//    public AccountTransferServiceImpl(AccountTransferMapper mapper){
-//        this.accountTransferMapper = mapper;
-//    }
-
+    // 내 전체 계좌 조회
     @Override
-//    @Transactional
-    public void transfer(AccountTransferDTO dto){
-        // 1. 출금 계좌 조회
-        AccountTransferVO fromAccount = accountTransferMapper.findAccountByAccountNumber(
-          dto.getAccountNumber(), dto.getBankCode()
-        );
+    public List<AccountTransferDTO> getUserAccounts(Long userId){
+        List<AccountTransferVO> accounts = accountTransferMapper.findAccountsByUserId(userId);
+        return accounts.stream()
+                .map(AccountTransferDTO::of)
+                .collect(Collectors.toList());
+    }
 
-        if(fromAccount == null){
-            throw new IllegalArgumentException("출금 계좌를 찾을 수 없습니다.");
+    // 검증 (예금주명, 잔액 등 확인)
+    @Override
+    public AccountTransferDTO validateTransfer(AccountTransferDTO dto) {
+        // 출금 계좌 조회
+        AccountTransferVO fromAccount = accountTransferMapper.findAccountByAccountNumber(
+                dto.getAccountNumber(), dto.getBankCode());
+
+        if (fromAccount == null) {
+            throw new IllegalArgumentException("출금 계좌가 존재하지 않습니다.");
         }
 
-        // 2. 잔액 확인
-        if(fromAccount.getBalance().compareTo(dto.getTransactionAmount())<0){
+        if (fromAccount.getBalance().compareTo(dto.getTransactionAmount()) < 0) {
             throw new IllegalArgumentException("잔액이 부족합니다.");
         }
 
-        // 3. 출금 처리 (잔액 차감)
-        BigDecimal newFromBalance = fromAccount.getBalance().subtract(dto.getTransactionAmount());
-        accountTransferMapper.updateAccountBalance(fromAccount.getAccountId(), newFromBalance);
-
-        // 4. 입금 계좌 조회
-//        AccountTransferVO toAccount = accountTransferMapper.findAccountByAccountNumber(
-//                dto.getPayeeAccountNumber(), dto.getSendBankCode()
-//        );
-//
-//        if(toAccount == null){
-//            throw new IllegalArgumentException("입금 계좌가 존재하지 않습니다.");
-//        }
-
-        // 4. 입금 계좌 존재 여부 + 예금주 확인
-//        String token = portOneClient.getAccessToken(impKey, impSecret);
+        // 예금주명 조회 (PortOne API)
         String accountHolderName = portOneClient.getAccountHolderName(
                 dto.getSendBankCode(),
                 dto.getPayeeAccountNumber()
-//                token
         );
 
         if (accountHolderName == null || accountHolderName.isBlank()) {
             throw new IllegalArgumentException("입금 계좌가 존재하지 않습니다.");
         }
 
-        // 5. 거래 내역 기록 시 예금주명도 저장
-//        dto.setAccountHolderName(accountHolderName);
+        // 사용자 확인을 위해 DTO에 세팅
+        dto.setAccountHolderName(accountHolderName);
+        dto.setAccountId(fromAccount.getAccountId());
+        return dto;
+    }
 
-        // 5. 거래 내역 기록
-        dto.setAccountId(fromAccount.getAccountId());       //출금계좌id
-        dto.setDepositWithdrawal(AccountTransferDTO.DepositWithdrawal.WITHDRAWAL);  //출금
-        dto.setStatus("SUCCESS");                           //거래상태
-        dto.setCreatedTime(java.time.LocalDateTime.now());  //거래시각
-        dto.setAccountHolderName(accountHolderName);        //예금주명
-        accountTransferMapper.insertTransaction(dto);
+    // 이체  (잔액 차감 + 거래 내역 저장)
+    @Override
+//    @Transactional
+    public void executeTransfer(AccountTransferDTO dto) {
+        // 출금 계좌 조회
+        AccountTransferVO fromAccount = accountTransferMapper.findAccountByAccountNumber(
+                dto.getAccountNumber(), dto.getBankCode());
 
+        if (fromAccount == null) {
+            throw new IllegalArgumentException("출금 계좌가 존재하지 않습니다.");
+        }
+
+        // 잔액 차감
+        BigDecimal newFromBalance = fromAccount.getBalance().subtract(dto.getTransactionAmount());
+        accountTransferMapper.updateAccountBalance(fromAccount.getAccountId(), newFromBalance);
+
+        // 거래 내역 기록
+        dto.setDepositWithdrawal(AccountTransferDTO.DepositWithdrawal.WITHDRAWAL);
+        dto.setStatus("SUCCESS");
+        dto.setCreatedTime(LocalDateTime.now());
+
+        accountTransferMapper.insertTransactions(dto);
     }
 
 }
