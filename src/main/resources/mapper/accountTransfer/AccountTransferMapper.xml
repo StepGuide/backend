@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stepguide.backend.domain.accountTransfer.mapper.AccountTransferMapper">
+
+    <!-- 내 전체 계좌 조회 -->
+    <select id="findAccountsByUserId"
+            resultType="com.stepguide.backend.domain.accountTransfer.entity.AccountTransferVO">
+        SELECT *
+        FROM accounts
+        WHERE user_id = #{userId}
+    </select>
+
+    <!-- 출금 계좌 조회 -->
+    <select id="findAccountByAccountNumber"
+            resultType="com.stepguide.backend.domain.accountTransfer.entity.AccountTransferVO">
+        SELECT *
+        FROM accounts
+        WHERE account_number = #{accountNumber}
+          AND bank_code = #{bankCode}
+    </select>
+
+    <!-- 출금 계좌 잔액 업데이트 -->
+    <update id="updateAccountBalance">
+        UPDATE accounts
+        SET balance = #{balance}, updated_at = NOW()
+        WHERE account_id = #{accountId}
+    </update>
+
+    <!-- 거래 내역 저장 -->
+    <insert id="insertTransactions">
+        INSERT INTO transactions(
+                                 account_id,
+                                 status,
+                                 send_bank_code,
+                                 transaction_amount,
+                                 created_time,
+                                 deposit_withdrawal,
+                                 payee_account_number,
+                                 account_holder_name,
+                                 memo
+        )
+        VALUES (
+                #{accountId},
+                #{status},
+                #{sendBankCode},
+                #{transactionAmount},
+                #{createdTime},
+                #{depositWithdrawal},
+                #{payeeAccountNumber},
+                #{accountHolderName},
+                #{memo}
+        )
+    </insert>
+
+
+</mapper>

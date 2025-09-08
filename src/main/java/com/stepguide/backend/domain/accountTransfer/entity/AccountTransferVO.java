@@ -1,0 +1,64 @@
+package com.stepguide.backend.domain.accountTransfer.entity;
+
+import com.stepguide.backend.domain.accountTransfer.dto.AccountTransferDTO;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class AccountTransferVO {
+
+    /*[계좌] accounts
+    account_id      계좌 id (bigint)
+    user_id         회원 id (bigint)
+    account_number  계좌번호 (varchar(30))
+    account_name    계좌이름 (varchar(100))
+    balance         잔액    (decimal(15,2))
+    bank_code       은행코드 (varchar(4))
+    created_at      생성일자 (datetime)
+    updated_at       수정일자 (datetime)
+     */
+    private Long accountId;         //계좌 id
+    private Long userId;            //회원 id
+    private String accountNumber;   //출금 계좌번호
+    private String accountName;     //출금 계좌명
+    private BigDecimal balance;     //출금 계좌 잔액
+    private String bankCode;        //출금 계좌 은행코드
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+    /*[입출금 내역] transactions
+    transaction_id          로그 id    (bigint)
+    account_id              계좌 id    (bigint)
+    status                  상태       (varchar(30))
+    send_bank_code          상대은행코드 (varchar(4))
+    transaction_amount      거래금액    (decimal(15,2))
+    create_time             생성시각    (date)
+    deposit_withdrawal      입금/출금 (deposit/withdrawal) (enum)
+    account_holder_name     예금주명    (varchar(100)
+    memo                    메모       (varchar(100)
+    */
+    private Long transactionId;             //거래내역 로그 id
+    private String status;                  //거래 상태
+    private String sendBankCode;            //입금 계좌 은행코드
+    private BigDecimal transactionAmount;   //거래금액
+    private LocalDateTime createdTime;           //거래 시각
+    private AccountTransferDTO.DepositWithdrawal depositWithdrawal;  //입금/출금 구분
+    private String payeeAccountNumber;      //입금 계좌번호
+    private String accountHolderName;       //예금주명
+    private String memo;                    //메모
+
+    public enum DepositWithdrawal{
+        DEPOSIT,        //입금
+        WITHDRAWAL      //출금
+    }
+
+}

@@ -32,8 +32,57 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+	// MyBatis + MySQL
+	implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+	implementation 'com.mysql:mysql-connector-j'
+
+	implementation 'org.springframework:spring-tx'
+
+	// JWT
+	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+	// Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// ✅ WebSocket
+	implementation 'org.springframework.boot:spring-boot-starter-websocket'
+
+	// ✅ Redis (Lettuce 사용)
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+	// ✅ STOMP 메시지 브로커 지원
+	implementation 'org.springframework:spring-messaging'
+
+	// ✅ JSON 직렬화/역직렬화 (메시지 payload 용)
+	implementation 'com.fasterxml.jackson.core:jackson-databind'
+
+	// ✅ Lombok (이미 있을 수 있음)
+	compileOnly 'org.projectlombok:lombok'
+	annotationProcessor 'org.projectlombok:lombok'
+
+	// JWT
+	implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+	// Security
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+
+	// Mockito + JUnit 5 통합 (MockitoExtension 사용 시)
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+
+	// Hamcrest (matchesPattern 등으로 응답 검증 시)
+	testImplementation 'org.hamcrest:hamcrest:2.2'
+
+	// ✅ 테스트용 추가
+	testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
+	testImplementation 'org.hamcrest:hamcrest:2.2'
 }
 
 tasks.named('test') {
 	useJUnitPlatform()
 }
+
