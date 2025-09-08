@@ -12,6 +12,9 @@ public interface AccountTransferService {
     // 내 전체 계좌 조회
     List<AccountTransferDTO> getUserAccounts(Long userId);
 
+    //거래내역 조회
+    List<AccountTransferDTO> getAccountTransactions(Long accountId);
+
     // 검증 (예금주명, 잔액 등 확인)
     AccountTransferDTO validateTransfer(AccountTransferDTO dto);
 

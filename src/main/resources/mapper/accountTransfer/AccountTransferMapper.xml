@@ -54,5 +54,12 @@
         )
     </insert>
 
+    <select id="findAccountTransactions"
+            resultType="com.stepguide.backend.domain.accountTransfer.entity.AccountTransferVO">
+        SELECT *
+        FROM transactions
+        WHERE account_id = #{accountId}
+    </select>
+
 
 </mapper>
