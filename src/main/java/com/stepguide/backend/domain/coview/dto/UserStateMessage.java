@@ -12,4 +12,3 @@ public class UserStateMessage {
     private String highlightedArea;     // 예: "금액 입력 칸"
     private String userName;            // 예: "김영자님"
 }
-
