@@ -46,3 +46,6 @@ out/
 ### 📦 Vue 빌드 결과 무시 ###
 src/main/resources/static/
 frontend/dist/
+
+# FCM 비공개 키
+src/main/resources/kbhack-1d170-firebase-adminsdk-fbsvc-f88df8e07a.json

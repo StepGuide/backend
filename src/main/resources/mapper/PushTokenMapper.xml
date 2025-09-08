@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stepguide.backend.domain.FireBase.mapper.PushTokenMapper">
+
+    <insert id="upsert">
+        INSERT INTO user_push_token (user_id, fcm_token, user_agent, subscribed)
+        VALUES (#{userId}, #{token}, #{ua}, 1)
+        ON DUPLICATE KEY UPDATE
+                             user_id = VALUES(user_id),
+                             user_agent = VALUES(user_agent),
+                             subscribed = 1,
+                             updated_at = CURRENT_TIMESTAMP
+    </insert>
+
+    <update id="unsubscribe">
+        UPDATE user_push_token
+        SET subscribed = 0, updated_at = CURRENT_TIMESTAMP
+        WHERE user_id = #{userId} AND fcm_token = #{token}
+    </update>
+
+    <select id="findLatestActiveToken" resultType="string">
+        SELECT fcm_token
+        FROM user_push_token
+        WHERE user_id = #{userId} AND subscribed = 1
+        ORDER BY updated_at DESC
+        LIMIT 1
+    </select>
+
+</mapper>

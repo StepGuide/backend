@@ -1,5 +1,8 @@
 package com.stepguide.backend.global.config;
 
+import com.stepguide.backend.domain.user.dto.UserDTO;
+import com.stepguide.backend.domain.user.mapper.UserMapper;
+import com.stepguide.backend.domain.user.service.CustomUser;
 import com.stepguide.backend.domain.user.service.JwtService;
 import io.jsonwebtoken.JwtException;
 import jakarta.servlet.FilterChain;
@@ -22,25 +25,34 @@ import java.util.List;
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
+    private final UserMapper userMapper; // 🔹 추가
 
     @Override
-    protected void doFilterInternal(
-            HttpServletRequest req,
-            HttpServletResponse res,
-            FilterChain chain
-    ) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain)
+            throws ServletException, IOException {
 
         String auth = req.getHeader("Authorization");
         if (auth != null && auth.startsWith("Bearer ")) {
             String accessToken = auth.substring(7);
+
             try {
                 String subject = jwtService.parseSubject(accessToken);
-                var authToken = new UsernamePasswordAuthenticationToken(
-                        subject, null, List.of(new SimpleGrantedAuthority("ROLE_USER"))
-                );
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+                Long userId = Long.valueOf(subject);
+
+                //DB에서 username 조회
+                UserDTO user = userMapper.findById(userId);
+                if (user != null) {
+                    String role = "ROLE_USER"; // 현재는 USER만 사용
+                    CustomUser principal = new CustomUser(userId, user.getUsername(), role);
+
+                    var authToken = new UsernamePasswordAuthenticationToken(
+                            principal, null, principal.getAuthorities()
+                    );
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                } else {
+                    SecurityContextHolder.clearContext(); // 존재하지 않으면 인증 세팅 안 함
+                }
             } catch (JwtException e) {
-                // 토큰이 만료/위조 등일 때 인증은 세팅하지 않고 흘려보냄(EntryPoint가 401 응답)
                 SecurityContextHolder.clearContext();
             }
         }
