@@ -1,4 +1,4 @@
-package com.stepguide.backend.domain.anomalydetection.dto;
+package com.stepguide.backend.domain.anomalyDetection.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

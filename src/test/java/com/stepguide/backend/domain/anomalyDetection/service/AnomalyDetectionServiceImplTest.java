@@ -1,4 +1,4 @@
-package com.stepguide.backend.domain.anomalydetection.service;
+package com.stepguide.backend.domain.anomalyDetection.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,8 +7,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalTime;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 class AnomalyDetectionServiceImplTest {

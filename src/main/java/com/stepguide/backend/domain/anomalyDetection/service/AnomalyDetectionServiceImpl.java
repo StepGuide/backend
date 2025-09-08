@@ -1,7 +1,7 @@
-package com.stepguide.backend.domain.anomalydetection.service;
+package com.stepguide.backend.domain.anomalyDetection.service;
 
-import com.stepguide.backend.domain.anomalydetection.dto.AnomalyScoreDTO;
-import com.stepguide.backend.domain.anomalydetection.mapper.AnomalyDetectionMapper;
+import com.stepguide.backend.domain.anomalyDetection.dto.AnomalyScoreDTO;
+import com.stepguide.backend.domain.anomalyDetection.mapper.AnomalyDetectionMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.stepguide.backend.domain.anomalydetection.mapper;
+package com.stepguide.backend.domain.anomalyDetection.mapper;
 
 import org.apache.ibatis.annotations.Param;
 
@@ -12,5 +12,5 @@ public interface AnomalyDetectionMapper {
 
     boolean existsFavoriteAccount(@Param("userId") Integer userId, @Param("accountNumber") String accountNumber);
 
-    BigDecimal findAvgTransferAmountLast30Days(@Param("userId") Integer userId, @Param("transactioDate") LocalDate transactionDate);
+    BigDecimal findAvgTransferAmountLast30Days(@Param("userId") Integer userId, @Param("transactionDate") LocalDate transactionDate);
 }
