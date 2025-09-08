@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.stepguide.backend.domain.anomalyDetection.mapper.AnomalyDetectionMapper">
+
+    <select id="countPrevioiusTransfers" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM transactions t
+                 JOIN accounts a ON t.account_id = a.account_id
+        WHERE a.user_id = #{userId}
+          AND t.payee_account_number = #{accountNumber}
+          AND t.deposit_withdrawal = 'WITHDRAWAL'
+          AND t.created_time >= #{fromDate}
+    </select>
+    <select id="countDailyTransfers" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM transactions t
+                 JOIN accounts a ON t.account_id = a.account_id
+        WHERE a.user_id = #{userId}
+          AND t.deposit_withdrawal = 'WITHDRAWAL'
+          AND DATE(t.created_time) = #{transactionDate}
+    </select>
+    <select id="existsFavoriteAccount" resultType="boolean">
+        SELECT EXISTS(
+            SELECT 1
+            FROM favorites f
+            WHERE f.user_id = #{userId}
+              AND f.send_account_number = #{accountNumber}
+        )
+    </select>
+    <select id="findAvgTransferAmountLast30Days" resultType="java.math.BigDecimal">
+        SELECT IFNULL(AVG(t.transaction_amount), 0)
+        FROM transactions t
+                 JOIN accounts a ON t.account_id = a.account_id
+        WHERE a.user_id = #{userId}
+          AND t.deposit_withdrawal = 'WITHDRAWAL'
+          AND t.created_time BETWEEN DATE_SUB(#{transactionDate}, INTERVAL 31 DAY)  -- 30일 전
+            AND DATE_SUB(#{transactionDate}, INTERVAL 1 DAY); -- 어제
+    </select>
+
+
+</mapper>
