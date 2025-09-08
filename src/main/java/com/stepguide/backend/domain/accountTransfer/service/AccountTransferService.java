@@ -9,8 +9,6 @@ import java.util.List;
 
 public interface AccountTransferService {
 
-//    void transfer(AccountTransferDTO dto);
-
     // 내 전체 계좌 조회
     List<AccountTransferDTO> getUserAccounts(Long userId);
 
