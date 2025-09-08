@@ -14,7 +14,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
-
+import com.stepguide.backend.domain.user.mapper.UserMapper;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 
@@ -25,9 +25,10 @@ public class SecurityConfig {
     private String[] allowedOrigins;
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtService jwtService,
+                                           UserMapper userMapper) throws Exception {
         // JWT 인증 필터
-        var jwtFilter = new JwtAuthenticationFilter(jwtService);
+        var jwtFilter = new JwtAuthenticationFilter(jwtService, userMapper);
 
         http
                 // CORS
