@@ -16,23 +16,7 @@ public class AccountTransferController {
 
     private final AccountTransferService accountTransferService;
 
-    /*
-    출금 거래 처리
-     */
-/*    @PostMapping
-    public ResponseEntity<String> transfer(@RequestBody AccountTransferDTO dto){
-        try{
-            accountTransferService.transfer(dto);
-            return ResponseEntity.ok("거래가 성공적으로 처리되었습니다.");
-        } catch(IllegalArgumentException e){
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        } catch(Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("거래 처리 중 오류가 발생했습니다." + e.getMessage());
-        }
-    }*/
-
-    // Step 1: 내 계좌 조회
+    // 1단계 : 내 계좌 조회
     @GetMapping("/accounts/{userId}")
     public ResponseEntity<List<AccountTransferDTO>> getUserAccounts(@PathVariable Long userId) {
         return ResponseEntity.ok(accountTransferService.getUserAccounts(userId));
@@ -53,28 +37,3 @@ public class AccountTransferController {
     }
 
 }
-/* [TEST]
-###
-POST http://localhost:8080/api/transfer
-Content-Type: application/json
-
-{
-  "accountId": 1,
-  "userId": 1,
-  "accountNumber": "1234567890",
-  "accountName": "KB 입출금계좌",
-  "balance": 1000000.00,
-  "bankCode": "0001",
-  "createdAt": "",
-  "updatedAt": "",
-  "transactionId": 0,
-  "status": "",
-  "sendBankCode": "004",
-  "transactionAmount": 50000.00,
-  "createdTime": "",
-  "depositWithdrawal": "WITHDRAWAL",
-  "payeeAccountNumber": "계좌번호",
-  "accountHolderName": ""
-}
-
- */
