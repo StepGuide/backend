@@ -15,7 +15,9 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/ws")
                 .setAllowedOriginPatterns("*")
                 .withSockJS()
-                .setSuppressCors(true);
+                .setHeartbeatTime(25000) // 하트비트 간격 (25초)
+                .setDisconnectDelay(5000) // 연결 해제 지연 (5초)
+                .setSessionCookieNeeded(false); // 세션 쿠키 불필요
     }
     
 

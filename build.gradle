@@ -71,6 +71,7 @@ dependencies {
 	// Security
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 
+
 	// Mockito + JUnit 5 통합 (MockitoExtension 사용 시)
 	testImplementation 'org.mockito:mockito-junit-jupiter:5.12.0'
 
