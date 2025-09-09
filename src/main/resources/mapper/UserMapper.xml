@@ -28,13 +28,12 @@
              #{providerId})
     </insert>
 
-<<<<<<< Updated upstream
     <select id="findUsernameById" resultType="String">
         SELECT username
         FROM users
         WHERE user_id = #{userId}
     </select>
-=======
+
     <select id="findById" parameterType="long"
             resultType="com.stepguide.backend.domain.user.dto.UserDTO">
         SELECT user_id, username, email, provider, provider_id
@@ -43,5 +42,4 @@
         LIMIT 1
     </select>
 
->>>>>>> Stashed changes
 </mapper>
