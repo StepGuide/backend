@@ -5,6 +5,19 @@
 
 <mapper namespace="com.stepguide.backend.domain.user.mapper.UserMapper">
 
+    <resultMap id="UserMap" type="com.stepguide.backend.domain.user.dto.UserDTO">
+        <id     property="userId"        column="user_id"/>
+        <result property="username"      column="username"/>
+        <result property="email"         column="email"/>
+        <result property="phoneNumber"   column="phone_number"/>
+        <result property="guardianPhone" column="guardian_phone"/>
+        <result property="birthDate"     column="birth_date"   jdbcType="DATE"/>
+        <result property="createdAt"     column="created_at"   jdbcType="TIMESTAMP"/>
+        <result property="updatedAt"     column="updated_at"   jdbcType="TIMESTAMP"/>
+        <result property="provider"      column="provider"/>
+        <result property="providerId"    column="provider_id"/>
+    </resultMap>
+
     <select id="findIdByProviderAndProviderId" parameterType="map" resultType="java.lang.Long">
         SELECT user_id
         FROM users
@@ -34,11 +47,26 @@
         WHERE user_id = #{userId}
     </select>
 
-    <select id="findById" parameterType="long"
-            resultType="com.stepguide.backend.domain.user.dto.UserDTO">
-        SELECT user_id, username, email, provider, provider_id
+    <select id="findById" parameterType="long" resultMap="UserMap">
+        SELECT
+            user_id, username, email, phone_number, guardian_phone,
+            birth_date, created_at, updated_at, provider, provider_id
         FROM users
         WHERE user_id = #{userId}
+        LIMIT 1
+    </select>
+    
+    <update id="updateGuardianPhone">
+        UPDATE users
+        SET guardian_phone = #{phone}, updated_at = NOW()
+        WHERE user_id = #{userId}
+    </update>
+
+    <select id="findIdByPhoneNormalized" parameterType="string" resultType="long">
+        SELECT user_id
+        FROM users
+        WHERE REPLACE(REPLACE(phone_number, '-', ''), ' ', '')
+                  = REPLACE(REPLACE(#{phone}, '-', ''), ' ', '')
         LIMIT 1
     </select>
 

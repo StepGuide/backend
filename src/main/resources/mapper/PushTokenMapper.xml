@@ -27,5 +27,14 @@
         ORDER BY updated_at DESC
         LIMIT 1
     </select>
-
+    <update id="unsubscribeByToken">
+        UPDATE user_push_token
+        SET subscribed = 0, updated_at = CURRENT_TIMESTAMP
+        WHERE fcm_token = #{token} AND subscribed = 1
+    </update>
+    <update id="deactivateAllActiveByUserId">
+        UPDATE user_push_token
+        SET subscribed = 0, updated_at = CURRENT_TIMESTAMP
+        WHERE user_id = #{userId} AND subscribed = 1
+    </update>
 </mapper>

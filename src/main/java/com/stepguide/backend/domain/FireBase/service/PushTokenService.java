@@ -14,6 +14,7 @@ public class PushTokenService {
 
     @Transactional
     public void register(Long userId, String token, String userAgent) {
+        mapper.deactivateAllActiveByUserId(userId);
         mapper.upsert(userId, token, userAgent);
     }
 
@@ -25,4 +26,10 @@ public class PushTokenService {
     public Optional<String> findLatestActiveToken(Long userId) {
         return Optional.ofNullable(mapper.findLatestActiveToken(userId));
     }
+
+    public int unsubscribeByToken(String token) {
+        return mapper.unsubscribeByToken(token);
+    }
+
+
 }
