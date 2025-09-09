@@ -20,9 +20,15 @@ public class PushController {
                                          @RequestHeader(value="Authorization", required=false) String bearer,
                                          @RequestHeader(value="User-Agent", required=false) String ua) {
         if (bearer == null || !bearer.startsWith("Bearer ")) return ResponseEntity.status(401).build();
-        String access = bearer.substring(7);
+        if (req.getToken() == null || req.getToken().isBlank()) return ResponseEntity.badRequest().build();
 
-        Long userId = Long.parseLong(jwtService.parseSubject(access)); // ⬅️ subject = userId
+        final Long userId;
+        try {
+            String access = bearer.substring(7).trim();
+            userId = Long.parseLong(jwtService.parseSubject(access));
+        } catch (Exception e) {
+            return ResponseEntity.status(401).build(); // JWT가 비정상이면 401로
+        }
 
         pushTokenService.register(userId, req.getToken(), ua);
         return ResponseEntity.ok().build();
@@ -31,14 +37,10 @@ public class PushController {
     @PostMapping("/unregister-token")
     public ResponseEntity<Void> unregister(@RequestBody RegisterTokenDTO req,
                                            @RequestHeader(value="Authorization", required=false) String bearer) {
-        if (bearer == null || !bearer.startsWith("Bearer "))
-            return ResponseEntity.status(401).build();
-        if (req.getToken() == null || req.getToken().isBlank())
+        if (req == null || req.getToken() == null || req.getToken().isBlank()) {
             return ResponseEntity.badRequest().build();
-
-        String access = bearer.substring(7);
-        Long userId = Long.parseLong(jwtService.parseSubject(access)); // subject = userId
-        pushTokenService.unsubscribe(userId, req.getToken());          // subscribed=0
+        }
+        pushTokenService.unsubscribeByToken(req.getToken());
         return ResponseEntity.ok().build();
     }
 }
