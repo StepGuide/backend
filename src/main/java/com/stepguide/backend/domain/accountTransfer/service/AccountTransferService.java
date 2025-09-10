@@ -18,9 +18,17 @@ public interface AccountTransferService {
     // 검증 (예금주명, 잔액 등 확인)
     AccountTransferDTO validateTransfer(AccountTransferDTO dto);
 
-
-    // 이체  (잔액 차감 + 거래 내역 저장)
+    // 지연 or 즉시 선택
     void executeTransfer(AccountTransferDTO dto);
+
+    //즉시이체(잔액 차감 + 거래 내역 저장)
+    void processImmediateTransfer(AccountTransferDTO dto);
+
+    //지연이쳬 예약
+    void scheduledDelayedTransfer(AccountTransferDTO dto);
+
+    //지연이체 실행
+    void processDelayedTransfer(AccountTransferDTO dto);
 
 
 }

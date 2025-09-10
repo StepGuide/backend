@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Mapper
@@ -27,5 +28,14 @@ public interface AccountTransferMapper {
 
     // 거래 내역 조회
     List<AccountTransferVO> findAccountTransactions(@Param("accountId")Long accountId);
+
+    //지연 거래 내역 저장
+    void insertDelayedTransactions(AccountTransferDTO dto);
+
+    //지연 거래 내역 status 갱신
+    void updateDelayedTransactionStatus(@Param("delayedTransactionId") Long delayedTransactionId, @Param("status") String status);
+
+    //준비된 지연 거래 내역 찾기
+    List<AccountTransferDTO> findDelayedTransactionsReady(@Param("now") LocalDateTime now);
 
 }

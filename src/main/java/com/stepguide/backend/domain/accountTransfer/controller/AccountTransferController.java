@@ -39,7 +39,15 @@ public class AccountTransferController {
     @PostMapping("/execute")
     public ResponseEntity<String> executeTransfer(@RequestBody AccountTransferDTO dto) {
         accountTransferService.executeTransfer(dto);
-        return ResponseEntity.ok("이체가 완료되었습니다.");
+
+        String transferTypeKor = switch (dto.getTransferType()) {
+            case IMMEDIATE -> "즉시 이체";
+            case DELAYED -> "지연 이체";
+        };
+
+        return ResponseEntity.ok(transferTypeKor+" 요청이 처리되었습니다.");
+
+
     }
 
 }
