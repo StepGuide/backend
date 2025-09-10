@@ -62,6 +62,14 @@ public class AccountTransferDTO {
         WITHDRAWAL      //출금
     }
 
+    //즉시, 지연 구분
+    private Long dealyedTransactionId;
+    private TransferType transferType; //즉시 or 지연 구분
+    private LocalDateTime scheduledTime; //지연 예약시간
+    public enum TransferType{
+        IMMEDIATE, DELAYED
+    }
+
     // VO -> DTO
     public static AccountTransferDTO of(AccountTransferVO vo) {
         if (vo == null) return null;

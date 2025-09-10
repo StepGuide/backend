@@ -27,6 +27,11 @@
         SET balance = #{balance}, updated_at = NOW()
         WHERE account_id = #{accountId}
     </update>
+    <update id="updateDelayedTransactionStatus">
+        UPDATE delayed_transactions
+        SET status = #{status}
+        WHERE delayed_transaction_id = #{delayedTransactionId}
+    </update>
 
     <!-- 거래 내역 저장 -->
     <insert id="insertTransactions">
@@ -53,6 +58,31 @@
                 #{memo}
         )
     </insert>
+    <insert id="insertDelayedTransactions">
+        INSERT INTO delayed_transactions (
+            account_id,
+            send_bank_code,
+            transaction_amount,
+            deposit_withdrawal,
+            payee_account_number,
+            account_holder_name,
+            memo,
+            status,
+            scheduled_time,
+            created_time
+        ) VALUES (
+                     #{accountId},
+                     #{sendBankCode},
+                     #{transactionAmount},
+                     #{depositWithdrawal},
+                     #{payeeAccountNumber},
+                     #{accountHolderName},
+                     #{memo},
+                     #{status},
+                     #{scheduledTime},
+                     #{createdTime}
+                 )
+    </insert>
 
     <select id="findAccountTransactions"
             resultType="com.stepguide.backend.domain.accountTransfer.entity.AccountTransferVO">
@@ -60,6 +90,21 @@
         FROM transactions
         WHERE account_id = #{accountId}
         order by created_time desc, transaction_id desc
+    </select>
+    <select id="findDelayedTransactionsReady"
+            resultType="com.stepguide.backend.domain.accountTransfer.dto.AccountTransferDTO">
+        SELECT
+        dt.delayed_transaction_id AS dealyedTransactionId,
+        dt.send_bank_code AS sendBankCode,
+        dt.transaction_amount AS transactionAmount,
+        dt.payee_account_number AS payeeAccountNumber,
+        dt.memo AS memo,
+        a.account_number AS accountNumber,
+        a.bank_code AS bankCode
+        FROM delayed_transactions dt
+        LEFT JOIN accounts a ON dt.account_id = a.account_id
+        WHERE dt.status = 'PENDING'
+        AND dt.scheduled_time &lt;= NOW()
     </select>
 
 
