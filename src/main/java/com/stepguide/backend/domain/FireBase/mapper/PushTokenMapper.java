@@ -12,4 +12,6 @@ public interface PushTokenMapper {
                     @Param("token") String token);
 
     String findLatestActiveToken(@Param("userId") Long userId);
+    int unsubscribeByToken(@Param("token") String token);
+    int deactivateAllActiveByUserId(@Param("userId") Long userId);
 }

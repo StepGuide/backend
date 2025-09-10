@@ -16,5 +16,7 @@ public interface UserMapper {
     String findUsernameById(@Param("userId") Long userId);
 
     UserDTO findById(@Param("userId") Long userId);
-
+    int updateGuardianPhone(@Param("userId") Long userId,
+                            @Param("phone") String phone);
+    Long findIdByPhoneNormalized(@Param("phone") String phone);
 }

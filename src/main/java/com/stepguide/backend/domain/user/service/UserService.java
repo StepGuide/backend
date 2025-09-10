@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import lombok.extern.log4j.Log4j2;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -71,5 +72,21 @@ public class UserService {
     }
     public String getUsernameById(Long userId){
         return userMapper.findUsernameById(userId);
+    }
+
+    public UserDTO getMe(Long userId) {
+        return userMapper.findById(userId);
+    }
+
+    public void saveGuardianPhone(Long userId, String phone) {
+        userMapper.updateGuardianPhone(userId, phone != null ? phone.trim() : null);
+    }
+
+    public Optional<Long> findGuardianUserIdOf(Long childUserId) {
+        UserDTO me = userMapper.findById(childUserId);
+        if (me == null || me.getGuardianPhone() == null || me.getGuardianPhone().isBlank()) {
+            return Optional.empty();
+        }
+        return Optional.ofNullable(userMapper.findIdByPhoneNormalized(me.getGuardianPhone()));
     }
 }
