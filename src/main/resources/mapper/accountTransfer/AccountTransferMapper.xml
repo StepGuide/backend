@@ -59,6 +59,7 @@
         SELECT *
         FROM transactions
         WHERE account_id = #{accountId}
+        order by created_time desc, transaction_id desc
     </select>
 
 
