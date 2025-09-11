@@ -15,6 +15,10 @@ public interface AccountTransferMapper {
     // 내 전체 계좌 조회
     List<AccountTransferVO> findAccountsByUserId(@Param("userId") Long userId);
 
+    // 특정 계좌 조회
+        List<AccountTransferVO> findTransactionsByAccountId(@Param("accountId") Long accountId);
+
+
     // 출금 계좌 조회
     AccountTransferVO findAccountByAccountNumber(@Param("accountNumber") String accountNumber,
                                                  @Param("bankCode") String bankCode);
@@ -37,5 +41,8 @@ public interface AccountTransferMapper {
 
     //준비된 지연 거래 내역 찾기
     List<AccountTransferDTO> findDelayedTransactionsReady(@Param("now") LocalDateTime now);
+
+    //테이블 젤 위 계좌 조회
+    AccountTransferDTO findAccountOneByUserId (@Param("userId") Long userId);
 
 }

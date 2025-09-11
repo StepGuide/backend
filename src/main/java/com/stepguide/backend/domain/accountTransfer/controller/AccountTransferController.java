@@ -22,7 +22,13 @@ public class AccountTransferController {
         return ResponseEntity.ok(accountTransferService.getUserAccounts(userId));
     }
 
-    //1.1단계 : 최근 계좌 조회
+    // 1.1단계 : 특정 계좌 조회
+    @GetMapping("/accounts/{accountId}/transactions")
+    public ResponseEntity<List<AccountTransferDTO>> getTransactionByAccountId(@PathVariable Long accountId) {
+        return ResponseEntity.ok(accountTransferService.getTransactionByAccountId(accountId));
+    }
+
+    //1.2단계 : 최근 거래 조회
     @GetMapping("/transactions/{accountId}")
     public ResponseEntity<List<AccountTransferDTO>> getAccountTransfer(@PathVariable Long accountId) {
         return ResponseEntity.ok(accountTransferService.getAccountTransactions(accountId));
@@ -50,4 +56,9 @@ public class AccountTransferController {
 
     }
 
+    //제일위에있는 계좌 조회
+    @GetMapping("/oneaccounts/{userId}")
+    public ResponseEntity<AccountTransferDTO> getFirstAccountTransfer(@PathVariable Long userId) {
+        return ResponseEntity.ok(accountTransferService.getFirstAccountTransfer(userId));
+    }
 }
