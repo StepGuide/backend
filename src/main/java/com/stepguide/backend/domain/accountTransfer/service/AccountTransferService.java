@@ -12,6 +12,9 @@ public interface AccountTransferService {
     // 내 전체 계좌 조회
     List<AccountTransferDTO> getUserAccounts(Long userId);
 
+    // 특정 계좌 내역 조회
+    List<AccountTransferDTO> getTransactionByAccountId(Long accountId);
+
     //거래내역 조회
     List<AccountTransferDTO> getAccountTransactions(Long accountId);
 
@@ -30,5 +33,7 @@ public interface AccountTransferService {
     //지연이체 실행
     void processDelayedTransfer(AccountTransferDTO dto);
 
+    //테이블 젤위 계좌 조회
+    AccountTransferDTO getFirstAccountTransfer(Long userId);
 
 }

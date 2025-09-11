@@ -12,6 +12,15 @@
         WHERE user_id = #{userId}
     </select>
 
+    <!-- 특정 계좌내역 조회 -->
+    <select id="findAccountsByAccountId"
+            resultType="com.stepguide.backend.domain.accountTransfer.entity.AccountTransferVO">
+        SELECT *
+        FROM transactions
+        WHERE account_id = #{accountId}
+        ORDER BY transaction_date DESC
+    </select>
+
     <!-- 출금 계좌 조회 -->
     <select id="findAccountByAccountNumber"
             resultType="com.stepguide.backend.domain.accountTransfer.entity.AccountTransferVO">
@@ -105,6 +114,16 @@
         LEFT JOIN accounts a ON dt.account_id = a.account_id
         WHERE dt.status = 'PENDING'
         AND dt.scheduled_time &lt;= NOW()
+    </select>
+
+    <!-- 테이블 젤 위 계좌 조회 -->
+    <select id="findAccountOneByUseerId"
+            resultType="com.stepguide.backend.domain.accountTransfer.entity.AccountTransferVO">
+        SELECT *
+        FROM accounts
+        WHERE user_id = #{userId}
+        ORDER BY account_id asc
+        LIMIT 1;
     </select>
 
 

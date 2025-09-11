@@ -31,6 +31,16 @@ public class  AccountTransferServiceImpl implements AccountTransferService{
                 .collect(Collectors.toList());
     }
 
+    // 특정 계좌 조회
+    @Override
+    public List<AccountTransferDTO> getTransactionByAccountId(Long accountId){
+        List<AccountTransferVO> accounts = accountTransferMapper.findTransactionsByAccountId(accountId);
+        return accounts.stream()
+                .map(AccountTransferDTO::of)
+                .collect(Collectors.toList());
+    }
+
+
     //거래내역 조회
     @Transactional
     public List<AccountTransferDTO> getAccountTransactions(Long accountId){
@@ -127,6 +137,13 @@ public class  AccountTransferServiceImpl implements AccountTransferService{
         processImmediateTransfer(validated_dto); //transactions 기록 + 잔액 차감
         log.info("지연이체 실행: " + validated_dto);
         accountTransferMapper.updateDelayedTransactionStatus(validated_dto.getDealyedTransactionId(), "SUCCESS");
+    }
+
+    // 제일위에있는 계좌 조회
+    @Override
+    public AccountTransferDTO getFirstAccountTransfer(Long userId){
+        // VO -> DTO 변환
+        return accountTransferMapper.findAccountOneByUserId(userId);
     }
 
 
